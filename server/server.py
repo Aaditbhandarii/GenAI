@@ -13,11 +13,11 @@ import re
 load_dotenv()
 
 conn = psycopg2.connect(
-    user="postgres",
-    host="localhost",
+    user=os.environ['DB_USER'],
+    host=os.environ['DB_HOST'],
     database=os.environ['DB_NAME'],
     password=os.environ['DB_PASSWORD'],
-    port="5432"
+    port=os.environ['DB_PORT']
 )
 
 def normalize_name(name):

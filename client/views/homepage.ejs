@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Previous Searches</title>
+</head>
+<body>
+    <h1>Previous Searches</h1>
+    <% if (searches.length > 0) { %>
+        <ul>
+            <% searches.forEach(search => { %>
+                <li>
+                    <strong>Product Name:</strong> <%= search.product_name %><br>
+                    <strong>Brand:</strong> <%= search.product_brand %><br>
+                    <strong>Ingredients:</strong> <%= search.ingredients %>
+                </li>
+            <% }) %>
+        </ul>
+    <% } else { %>
+        <p>No previous searches found.</p>
+    <% } %>
+
+    <!-- Display predicted ingredients and analysis -->
+    <% if (typeof ingredients !== 'undefined') { %>
+        <h2>Predicted Ingredients:</h2>
+        <p><%= ingredients %></p>
+    <% } %>
+
+    <% if (typeof verdict !== 'undefined') { %>
+        <h2>Verdict:</h2>
+        <p><%= verdict %></p>
+    <% } %>
+
+    <% if (typeof why !== 'undefined' && why.length > 0) { %>
+        <h3>Reasons:</h3>
+        <ul>
+            <% why.forEach(reason => { %>
+                <li><%= reason %></li>
+            <% }) %>
+        </ul>
+    <% } %>
+
+    <% if (typeof detailed_analysis !== 'undefined') { %>
+        <h3>Detailed Analysis:</h3>
+        <p><%= detailed_analysis %></p>
+    <% } %>
+
+    <!-- Form to trigger the predict route -->
+    <form action="/predict" method="post">
+        <input type="text" name="claim" placeholder="Enter claim"><br>
+        <button type="submit">Predict Ingredients</button>
+    </form>
+    
+</body>
+</html>
