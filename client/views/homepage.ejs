@@ -4,53 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Previous Searches</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        h1, h2, h3 {
+            color: #333;
+            margin-top: 0;
+            font-size: 3rem;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #fafafa;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        strong {
+            color: #555;
+        }
+        p {
+            margin: 10px 0;
+        }
+        form {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
-    <h1>Previous Searches</h1>
-    <% if (searches.length > 0) { %>
-        <ul>
-            <% searches.forEach(search => { %>
-                <li>
-                    <strong>Product Name:</strong> <%= search.product_name %><br>
-                    <strong>Brand:</strong> <%= search.product_brand %><br>
-                    <strong>Ingredients:</strong> <%= search.ingredients %>
-                </li>
-            <% }) %>
-        </ul>
-    <% } else { %>
-        <p>No previous searches found.</p>
-    <% } %>
+    <div class="container">
+        <h1>Previous Searches</h1>
+        <% if (searches.length > 0) { %>
+            <ul>
+                <% searches.forEach(search => { %>
+                    <li>
+                        <strong>Product Name:</strong> <%= search.product_name %><br>
+                        <strong>Brand:</strong> <%= search.product_brand %><br>
+                        <strong>Ingredients:</strong> <%= search.ingredients %>
+                    </li>
+                <% }) %>
+            </ul>
+        <% } else { %>
+            <p>No previous searches found.</p>
+        <% } %>
 
-    <!-- Display predicted ingredients and analysis -->
-    <% if (typeof ingredients !== 'undefined') { %>
-        <h2>Predicted Ingredients:</h2>
-        <p><%= ingredients %></p>
-    <% } %>
+        <% if (typeof ingredients !== 'undefined') { %>
+            <h2>Predicted Ingredients:</h2>
+            <p><%= ingredients %></p>
+        <% } %>
 
-    <% if (typeof verdict !== 'undefined') { %>
-        <h2>Verdict:</h2>
-        <p><%= verdict %></p>
-    <% } %>
+        <% if (typeof verdict !== 'undefined') { %>
+            <h2>Verdict:</h2>
+            <p><%= verdict %></p>
+        <% } %>
 
-    <% if (typeof why !== 'undefined' && why.length > 0) { %>
-        <h3>Reasons:</h3>
-        <ul>
-            <% why.forEach(reason => { %>
-                <li><%= reason %></li>
-            <% }) %>
-        </ul>
-    <% } %>
+        <% if (typeof why !== 'undefined' && why.length > 0) { %>
+            <h3>Reasons:</h3>
+            <ul>
+                <% why.forEach(reason => { %>
+                    <li><%= reason %></li>
+                <% }) %>
+            </ul>
+        <% } %>
 
-    <% if (typeof detailed_analysis !== 'undefined') { %>
-        <h3>Detailed Analysis:</h3>
-        <p><%= detailed_analysis %></p>
-    <% } %>
+        <% if (typeof detailed_analysis !== 'undefined') { %>
+            <h3>Detailed Analysis:</h3>
+            <p><%= detailed_analysis %></p>
+        <% } %>
 
-    <!-- Form to trigger the predict route -->
-    <form action="/predict" method="post">
-        <input type="text" name="claim" placeholder="Enter claim"><br>
-        <button type="submit">Predict Ingredients</button>
-    </form>
-    
+        <form action="/predict" method="post">
+            <input type="text" name="claim" placeholder="Enter claim"><br>
+            <button type="submit">Predict Ingredients</button>
+        </form>
+    </div>
 </body>
 </html>

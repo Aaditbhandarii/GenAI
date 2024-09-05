@@ -92,8 +92,9 @@ app.get("/", (req, res) => {
     res.render("index.ejs");
 });
 
-app.get("/login", (req, res) => {
-    res.render("login.ejs");
+
+app.get("/loginpage", (req, res) => {
+    res.render("loginpage.ejs");
 });
 
 app.get("/register", (req, res) => {
@@ -106,7 +107,7 @@ app.post("/register", async (req, res) => {
     const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
 
     if (checkResult.rows.length > 0) {
-      res.redirect("/login");
+      res.redirect("/loginpage");
     } else {
       bcrypt.hash(password, saltRounds, async (err, hash) => {
         if (err) {
@@ -135,10 +136,10 @@ app.post("/register", async (req, res) => {
   }
 });
 app.post(
-  "/login",
+  "/loginpage",
   passport.authenticate("local", {
     successRedirect: "/homepage",
-    failureRedirect: "/login",
+    failureRedirect: "/loginpage",
   })
 );
 
@@ -182,7 +183,7 @@ app.post('/predict', async (req, res) => {
             res.status(500).send("Error occurred");
         }
     } else {
-        res.redirect("/login");
+        res.redirect("/loginpage");
     }
 });
 
@@ -190,14 +191,12 @@ app.post('/predict', async (req, res) => {
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
-  });
+});
   
-
-
 
 app.get('/homepage', async (req, res) => {
     if (!req.user.user_id) {
-      return res.redirect('/login');
+      return res.redirect('/loginpage');
     }
     try {
       const searches = await previousSearches(req.user.user_id);
