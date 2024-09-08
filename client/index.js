@@ -9,7 +9,11 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
 import { config } from "dotenv";
-
+import multer from 'multer';
+import FormData from 'form-data';
+import fs from 'fs';
+import sharp from "sharp";
+const upload = multer({ dest: 'uploads/' });
 
 const fileName = fileURLToPath(import.meta.url);
 const dotenvDirName = path.dirname(fileName);
@@ -33,7 +37,9 @@ app.use(
 );
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(express.static("public"));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -143,48 +149,136 @@ app.post(
   })
 );
 
-app.post('/predict', async (req, res) => {
-    if (req.isAuthenticated()) {
-        const userId = req.user.user_id;
-        const claim = req.body.claim;
-        console.log("User ID:", userId);
-        try {
-            let ingredients = null;
-            let verdict = "No verdict";
-            let why = [];
-            let detailed_analysis = "No analysis available";
+// app.post('/predict', async (req, res) => {
+//     if (req.isAuthenticated()) {
+//         const userId = req.user.user_id;
+//         const claim = req.body.claim;
+//         const filePath = req.file ? req.file.path : null;
+//         console.log("User ID:", userId);
+        
+//         try {
+//             let ingredients = null;
+//             let product_name = "No product name detected";
+//             let product_brand = "No product brand detected";
+//             let verdict = "No verdict";
+//             let why = [];
+//             let detailed_analysis = "No analysis available";
 
-            try {
-                const response = await axios.post(
-                    "http://127.0.0.1:5000/detect-ingredients",
-                    { image_path: "C:/Users/aadit/OneDrive - Shri Vile Parle Kelavani Mandal/Desktop/GenAI/server/image.png", user_id: userId },
-                    { headers: { "Content-Type": "application/json" } }
-                );
-                ingredients = response.data.ingredients || "No ingredients detected";
+//             try {
+//                 const response = await axios.post(
+//                     "http://127.0.0.1:5000/detect-ingredients",
+//                     { image_path: filePath, user_id: userId },
+//                     { headers: { "Content-Type": "application/json" } }
+//                 );
+//                 ingredients = response.data.ingredients || "No ingredients detected";
+//                 product_name = response.data.product_name || "No product name detected";
+//                 product_brand = response.data.product_brand || "No product brand detected";
+//                 const data = await analyzeClaim(claim, ingredients);
 
-                const data = await analyzeClaim(claim, ingredients);
+//                 console.log("Data:", data);
 
-                console.log("Data:", data);
+//                 if (data) {
+//                     verdict = data.verdict;
+//                     why = data.why;
+//                     detailed_analysis = data.detailed_analysis;
+//                 }
+//             } catch (error) {
+//                 console.error("Failed to make request:", error.message);
+//                 ingredients = "Error occurred during prediction";
+//             }
+//             res.render('prediction', { 
+//               product_name, 
+//               product_brand, 
+//               ingredients, 
+//               verdict, 
+//               why, 
+//               detailed_analysis 
+//           });
+          
+//         } catch (error) {
+//             console.error("Error fetching previous searches:", error.message);
+//             res.status(500).send("Error occurred");
+//         }
+//     } else {
+//         res.redirect("/loginpage");
+//     }
+// });
 
-                if (data) {
-                    verdict = data.verdict;
-                    why = data.why;
-                    detailed_analysis = data.detailed_analysis;
-                }
-            } catch (error) {
-                console.error("Failed to make request:", error.message);
-                ingredients = "Error occurred during prediction";
-            }
+// 
 
-            const searches = await previousSearches(userId);
-            res.render('homepage', { searches, ingredients, verdict, why, detailed_analysis });
-        } catch (error) {
-            console.error("Error fetching previous searches:", error.message);
-            res.status(500).send("Error occurred");
+
+app.post('/predict', upload.single('image'), async (req, res) => {
+  if (req.isAuthenticated()) {
+    const userId = req.user.user_id;
+    const claim = req.body.claim;
+    const file = req.file;
+
+    console.log("User ID:", userId);
+
+    try {
+      if (!file) {
+        console.error("No file uploaded");
+        return res.status(400).send("No file uploaded");
+      }
+
+      const jpegImagePath = path.join(dotenvDirName, 'uploads', 'saved_image.jpg');
+      await saveImageAsJPEG(file.path, jpegImagePath);
+
+      let ingredients = null;
+      let product_name = "No product name detected";
+      let product_brand = "No product brand detected";
+      let verdict = "No verdict";
+      let why = [];
+      let detailed_analysis = "No analysis available";
+
+      try {
+        const form = new FormData();
+        form.append('image', fs.createReadStream(jpegImagePath));
+        form.append('user_id', userId);
+        const response = await axios.post(
+          "http://127.0.0.1:5000/detect-ingredients",
+          form,
+          {
+            headers: {
+              ...form.getHeaders(),
+            },
+          }
+        );
+
+        ingredients = response.data.ingredients || "No ingredients detected";
+        product_name = response.data.product_name || "No product name detected";
+        product_brand = response.data.product_brand || "No product brand detected";
+        
+        const data = await analyzeClaim(claim, ingredients);
+
+        console.log("Data:", data);
+
+        if (data) {
+          verdict = data.verdict;
+          why = data.why;
+          detailed_analysis = data.detailed_analysis;
         }
-    } else {
-        res.redirect("/loginpage");
+      } catch (error) {
+        console.error("Failed to make request:", error.message);
+        ingredients = "Error occurred during prediction";
+      }
+
+      res.render('prediction', { 
+        product_name, 
+        product_brand, 
+        ingredients, 
+        verdict, 
+        why, 
+        detailed_analysis 
+      });
+    
+    } catch (error) {
+      console.error("Error fetching previous searches:", error.message);
+      res.status(500).send("Error occurred");
     }
+  } else {
+    res.redirect("/loginpage");
+  }
 });
 
 
@@ -207,6 +301,61 @@ app.get('/homepage', async (req, res) => {
     }
 });
   
+app.get('/product/:id', async (req, res) => {
+  if (req.isAuthenticated()) {
+      const productId = req.params.id;
+      try {
+          const query = 'SELECT * FROM products WHERE product_id = $1';
+          const values = [productId];
+          
+          const result = await db.query(query, values);
+
+          if (result.rows.length === 0) {
+              res.status(404).send('Product not found.');
+              return;
+          }
+          const product = result.rows[0];
+          res.render('productDetails', { product });
+      } catch (error) {
+          console.error("Error fetching product details:", error.message);
+          res.status(500).send("Error occurred while fetching product details.");
+      }
+  } else {
+      res.redirect("/login");
+  }
+});
+
+app.post('/search', async (req, res) => {
+  if (req.isAuthenticated()) {
+      const productName = req.body.product_name;
+      const userId = req.user.user_id;
+
+      try {
+          const query = `
+              SELECT * FROM products
+              WHERE LOWER(product_name) LIKE LOWER($1);
+          `;
+          const values = [`%${productName}%`];
+          
+          const result = await db.query(query, values);
+
+          if (result.rows.length === 0) {
+              res.render('searchResults', { products: [], message: 'No products found.', userId });
+              return;
+          }
+
+          const products = result.rows;
+          res.render('searchResults', { products, message: null, userId });
+
+      } catch (error) {
+          console.error("Error searching for products:", error.message);
+          res.status(500).send("Error occurred during the search.");
+      }
+  } else {
+      res.redirect("/login");
+  }
+});
+
 
 const previousSearches = async (user_id) => {
     try {
@@ -215,6 +364,8 @@ const previousSearches = async (user_id) => {
             FROM user_searches s
             JOIN products p ON s.product_id = p.product_id
             WHERE s.user_id = $1
+            ORDER BY s.search_timestamp DESC
+            LIMIT 3
         `;
         const result = await db.query(query, [user_id]);
         if (result.rows.length === 0) {
@@ -243,3 +394,15 @@ const analyzeClaim = async (claim, ingredients) => {
         throw error;
     }
 };
+async function saveImageAsJPEG(inputPath, outputPath) {
+  try {
+    await sharp(inputPath)
+      .jpeg()
+      .toFile(outputPath);
+    console.log(`Image saved as JPEG at: ${outputPath}`);
+    return outputPath;
+  } catch (error) {
+    console.error('Error saving image as JPEG:', error);
+    throw error;
+  }
+}

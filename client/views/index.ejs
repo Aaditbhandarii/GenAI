@@ -1,60 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentication</title>
-    <link rel="stylesheet" href="/styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            text-align: center;
-        }
-        form {
-            display: inline-block;
-            margin: 20px;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: white;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-        }
-        .register-button {
-            background-color: #4CAF50; /* Green */
-            color: white;
-        }
-        .login-button {
-            background-color: #008CBA; /* Blue */
-            color: white;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Welcome to Our App</h1>
-        <form action="/register" method="GET">
-            <h2>Register</h2>
-            <button type="submit" class="register-button">Register</button>
-        </form>
-        
-        <form action="/loginpage" method="GET">
-            <h2>Login</h2>
-            <button type="submit" class="login-button">Login</button>
-        </form>
+<%- include('partials/header') %>
+    <div class="main-content">
+        <div>
+            <h1>Welcome to Our App</h1>
+            <p>
+                Our platform helps you make informed decisions with ease. Whether you're browsing products,
+                exploring ingredients, or managing your daily routines, we provide accurate, reliable, and trustworthy
+                solutions. Join us to enhance your experience in the digital world.
+            </p>
+        </div>
     </div>
-</body>
-</html>
+

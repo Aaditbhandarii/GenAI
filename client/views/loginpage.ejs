@@ -4,79 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="/styles.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-        .container {
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        form {
-            display: inline-block;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: white;
-            text-align: left;
-            width: 100%;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #008CBA; /* Blue */
-            color: white;
-        }
-        .back-link {
-            display: block;
-            margin-top: 15px;
-            text-decoration: none;
-            color: #008CBA;
-        }
-    </style>
+    <link rel="stylesheet" href="/main.css">
 </head>
 <body>
+    <%- include('partials/header') %>
     <div class="container">
-        <h1>Login</h1>
-        <form action="/loginpage" method="POST">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Login</button>
-        </form>
-        <a href="/" class="back-link">Back to Home</a>
+        <div class = "login-form">
+            <h1 class="login">Login</h1>
+            <form action="/loginpage" method="POST">
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="loginbutton">Login</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

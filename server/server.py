@@ -174,16 +174,18 @@ def download_image(url, save_path):
     return True
 
 
+UPLOAD_PATH = 'C:/Users/aadit/OneDrive - Shri Vile Parle Kelavani Mandal/Desktop/GenAI/client/uploads'
+
 @app.route('/detect-ingredients', methods=['POST'])
 def detect_ingredients():
-    if 'image_path' not in request.json or 'user_id' not in request.json:
-        return jsonify({'error': 'Missing image_path or user_id'}), 400
-
-    image_path = request.json['image_path']
-    user_id = request.json['user_id']
-
+    if 'image' not in request.files or 'user_id' not in request.form:
+        return jsonify({'error': 'Missing image or user_id'}), 400
+    
+    user_id = request.form['user_id']
+    
     try:
-        brand_product = brand_name(image_path, model)
+        jpg_image_path = os.path.join(UPLOAD_PATH, 'saved_image.jpg')
+        brand_product = brand_name(jpg_image_path, model)
         name, category, brand = extract_details(brand_product)
         print(f"Extracted Details - Name: {name}, Category: {category}, Brand: {brand}")
 
@@ -192,7 +194,11 @@ def detect_ingredients():
             print("Ingredients fetched from database.")
             product_id = get_product_id(name, brand)
             log_user_search(user_id, product_id)
-            return jsonify({'ingredients': ingredients}), 200
+            return jsonify({
+                'product_name': name,
+                'product_brand': brand,
+                'ingredients': ingredients
+            }), 200
 
         ingredient_image_url = scrape_ingredient_image(name, category, brand)
         if ingredient_image_url == "No images available":
@@ -203,7 +209,7 @@ def detect_ingredients():
         if not download_image(ingredient_image_url, ingredient_image_path):
             return jsonify({'error': 'Failed to download image'}), 500
         
-        ingredients = ingredient_photo(ingredient_image_path, model , name, category, brand)
+        ingredients = ingredient_photo(ingredient_image_path, model, name, category, brand)
         if not ingredients:
             print("Failed to extract ingredients from image.")
             return jsonify({'error': 'Failed to extract ingredients'}), 500
@@ -214,11 +220,14 @@ def detect_ingredients():
         product_id = get_product_id(name, brand)
         log_user_search(user_id, product_id)
         
-        return jsonify({'ingredients': ingredients}), 200
+        return jsonify({
+            'product_name': name,
+            'product_brand': brand,
+            'ingredients': ingredients
+        }), 200
     except Exception as e:
         print(f"Server Error: {e}")
         return jsonify({'error': str(e)}), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True)
