@@ -20,6 +20,8 @@ conn = psycopg2.connect(
     port=os.environ['DB_PORT']
 )
 
+UPLOAD_PATH = 'C:/Users/aadit/OneDrive - Shri Vile Parle Kelavani Mandal/Desktop/GenAI/client/uploads'
+
 def normalize_name(name):
     name = name.replace('+', ' ').replace('&', 'and')
     return re.sub(r'\s+', ' ', name.strip().replace('.', '').lower())
@@ -173,18 +175,15 @@ def download_image(url, save_path):
         return False
     return True
 
-
-UPLOAD_PATH = 'C:/Users/aadit/OneDrive - Shri Vile Parle Kelavani Mandal/Desktop/GenAI/client/uploads'
-
 @app.route('/detect-ingredients', methods=['POST'])
 def detect_ingredients():
     if 'image' not in request.files or 'user_id' not in request.form:
         return jsonify({'error': 'Missing image or user_id'}), 400
-    
     user_id = request.form['user_id']
-    
+    filename = request.form['filename']
+    print(f"User ID: {user_id}, Filename: {filename}")
     try:
-        jpg_image_path = os.path.join(UPLOAD_PATH, 'saved_image.jpg')
+        jpg_image_path = os.path.join(UPLOAD_PATH, filename)
         brand_product = brand_name(jpg_image_path, model)
         name, category, brand = extract_details(brand_product)
         print(f"Extracted Details - Name: {name}, Category: {category}, Brand: {brand}")

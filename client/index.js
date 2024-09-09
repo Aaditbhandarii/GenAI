@@ -13,6 +13,7 @@ import multer from 'multer';
 import FormData from 'form-data';
 import fs from 'fs';
 import sharp from "sharp";
+import { v4 as uuidv4 } from 'uuid';
 const upload = multer({ dest: 'uploads/' });
 
 const fileName = fileURLToPath(import.meta.url);
@@ -198,8 +199,8 @@ app.post('/predict', upload.single('image'), async (req, res) => {
         console.error("No file uploaded");
         return res.status(400).send("No file uploaded");
       }
-
-      const jpegImagePath = path.join(dotenvDirName, 'uploads', 'saved_image.jpg');
+      const uniqueFilename = uuidv4() + '.jpg';
+      const jpegImagePath = path.join(dotenvDirName, 'uploads', uniqueFilename);
       await saveImageAsJPEG(file.path, jpegImagePath);
 
       let ingredients = null;
@@ -213,6 +214,7 @@ app.post('/predict', upload.single('image'), async (req, res) => {
         const form = new FormData();
         form.append('image', fs.createReadStream(jpegImagePath));
         form.append('user_id', userId);
+        form.append('filename', uniqueFilename);
         const response = await axios.post(
           "http://127.0.0.1:5000/detect-ingredients",
           form,
