@@ -21,7 +21,7 @@ conn = psycopg2.connect(
 )
 
 def normalize_name(name):
-    """Normalize the product name by removing extra spaces and punctuation."""
+    name = name.replace('+', ' ').replace('&', 'and')
     return re.sub(r'\s+', ' ', name.strip().replace('.', '').lower())
 
 def log_ingredients(product_name, brand_name, ingredients):
@@ -188,15 +188,16 @@ def detect_ingredients():
         brand_product = brand_name(jpg_image_path, model)
         name, category, brand = extract_details(brand_product)
         print(f"Extracted Details - Name: {name}, Category: {category}, Brand: {brand}")
-
         ingredients = fetch_ingredients_from_db(name, brand)
+        normalized_name = normalize_name(name)
+        normalized_brand = normalize_name(brand)
         if ingredients:
             print("Ingredients fetched from database.")
             product_id = get_product_id(name, brand)
             log_user_search(user_id, product_id)
             return jsonify({
-                'product_name': name,
-                'product_brand': brand,
+                'product_name': normalized_name,
+                'product_brand': normalized_brand,
                 'ingredients': ingredients
             }), 200
 
@@ -219,10 +220,10 @@ def detect_ingredients():
         log_ingredients(name, brand, ingredients)
         product_id = get_product_id(name, brand)
         log_user_search(user_id, product_id)
-        
+        print(f"Normalized Name: {normalized_name}, Normalized Brand: {normalized_brand}")
         return jsonify({
-            'product_name': name,
-            'product_brand': brand,
+            'product_name': normalized_name,
+            'product_brand': normalized_brand,
             'ingredients': ingredients
         }), 200
     except Exception as e:

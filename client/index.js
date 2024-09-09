@@ -68,7 +68,6 @@ passport.deserializeUser(async (id, done) => {
       done(err);
     }
 });
-  
 
 passport.use(
   new LocalStrategy(
@@ -97,7 +96,6 @@ passport.use(
 app.get("/", (req, res) => {
     res.render("index.ejs");
 });
-
 
 app.get("/loginpage", (req, res) => {
     res.render("loginpage.ejs");
@@ -141,6 +139,44 @@ app.post("/register", async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
+
+app.get('/homepage', async (req, res) => {
+    if (!req.user.user_id) {
+      return res.redirect('/loginpage');
+    }
+    try {
+      const searches = await previousSearches(req.user.user_id);
+      res.render('homepage', { searches });
+    } catch (err) {
+      console.error("Error fetching previous searches:", err);
+      res.status(500).send("Error occurred");
+    }
+});
+  
+app.get('/product/:id', async (req, res) => {
+  if (req.isAuthenticated()) {
+      const productId = req.params.id;
+      try {
+          const query = 'SELECT * FROM products WHERE product_id = $1';
+          const values = [productId];
+          
+          const result = await db.query(query, values);
+
+          if (result.rows.length === 0) {
+              res.status(404).send('Product not found.');
+              return;
+          }
+          const product = result.rows[0];
+          res.render('productDetails', { product });
+      } catch (error) {
+          console.error("Error fetching product details:", error.message);
+          res.status(500).send("Error occurred while fetching product details.");
+      }
+  } else {
+      res.redirect("/login");
+  }
+});
+
 app.post(
   "/loginpage",
   passport.authenticate("local", {
@@ -148,64 +184,6 @@ app.post(
     failureRedirect: "/loginpage",
   })
 );
-
-// app.post('/predict', async (req, res) => {
-//     if (req.isAuthenticated()) {
-//         const userId = req.user.user_id;
-//         const claim = req.body.claim;
-//         const filePath = req.file ? req.file.path : null;
-//         console.log("User ID:", userId);
-        
-//         try {
-//             let ingredients = null;
-//             let product_name = "No product name detected";
-//             let product_brand = "No product brand detected";
-//             let verdict = "No verdict";
-//             let why = [];
-//             let detailed_analysis = "No analysis available";
-
-//             try {
-//                 const response = await axios.post(
-//                     "http://127.0.0.1:5000/detect-ingredients",
-//                     { image_path: filePath, user_id: userId },
-//                     { headers: { "Content-Type": "application/json" } }
-//                 );
-//                 ingredients = response.data.ingredients || "No ingredients detected";
-//                 product_name = response.data.product_name || "No product name detected";
-//                 product_brand = response.data.product_brand || "No product brand detected";
-//                 const data = await analyzeClaim(claim, ingredients);
-
-//                 console.log("Data:", data);
-
-//                 if (data) {
-//                     verdict = data.verdict;
-//                     why = data.why;
-//                     detailed_analysis = data.detailed_analysis;
-//                 }
-//             } catch (error) {
-//                 console.error("Failed to make request:", error.message);
-//                 ingredients = "Error occurred during prediction";
-//             }
-//             res.render('prediction', { 
-//               product_name, 
-//               product_brand, 
-//               ingredients, 
-//               verdict, 
-//               why, 
-//               detailed_analysis 
-//           });
-          
-//         } catch (error) {
-//             console.error("Error fetching previous searches:", error.message);
-//             res.status(500).send("Error occurred");
-//         }
-//     } else {
-//         res.redirect("/loginpage");
-//     }
-// });
-
-// 
-
 
 app.post('/predict', upload.single('image'), async (req, res) => {
   if (req.isAuthenticated()) {
@@ -281,50 +259,6 @@ app.post('/predict', upload.single('image'), async (req, res) => {
   }
 });
 
-
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
-  
-
-app.get('/homepage', async (req, res) => {
-    if (!req.user.user_id) {
-      return res.redirect('/loginpage');
-    }
-    try {
-      const searches = await previousSearches(req.user.user_id);
-      res.render('homepage', { searches });
-    } catch (err) {
-      console.error("Error fetching previous searches:", err);
-      res.status(500).send("Error occurred");
-    }
-});
-  
-app.get('/product/:id', async (req, res) => {
-  if (req.isAuthenticated()) {
-      const productId = req.params.id;
-      try {
-          const query = 'SELECT * FROM products WHERE product_id = $1';
-          const values = [productId];
-          
-          const result = await db.query(query, values);
-
-          if (result.rows.length === 0) {
-              res.status(404).send('Product not found.');
-              return;
-          }
-          const product = result.rows[0];
-          res.render('productDetails', { product });
-      } catch (error) {
-          console.error("Error fetching product details:", error.message);
-          res.status(500).send("Error occurred while fetching product details.");
-      }
-  } else {
-      res.redirect("/login");
-  }
-});
-
 app.post('/search', async (req, res) => {
   if (req.isAuthenticated()) {
       const productName = req.body.product_name;
@@ -356,6 +290,9 @@ app.post('/search', async (req, res) => {
   }
 });
 
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
 
 const previousSearches = async (user_id) => {
     try {
