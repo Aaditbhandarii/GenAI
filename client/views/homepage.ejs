@@ -90,7 +90,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="upper-section">
+        <!-- <div class="upper-section">
             <h1>Predict Ingredients</h1>
             <form action="/predict" method="post" enctype="multipart/form-data">
                 <label for="image">Upload an image:</label>
@@ -99,7 +99,24 @@
                 <input type="text" name="claim" id="claim"><br>
                 <button type="submit">Predict from Image</button>
             </form>
+        </div> -->
+
+        <div class="upper-section">
+            <h1>Predict Ingredients</h1>
+            <form action="/predict" method="post" enctype="multipart/form-data">
+                <label for="image">Upload an image:</label>
+                <input type="file" name="image" id="image" accept="image/*"><br>
+                
+                <label for="ingredients">Or enter ingredients manually:</label>
+                <textarea name="ingredients" id="ingredients" rows="4" cols="50" placeholder="Enter ingredients separated by commas"></textarea><br>
+                
+                <label for="claim">Claim:</label>
+                <input type="text" name="claim" id="claim"><br>
+                
+                <button type="submit">Predict</button>
+            </form>
         </div>
+        
 
         <div class="lower-section">
             <h2>Previous Searches</h2>

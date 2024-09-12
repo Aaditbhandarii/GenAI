@@ -191,58 +191,53 @@ app.post('/predict', upload.single('image'), async (req, res) => {
     const userId = req.user.user_id;
     const claim = req.body.claim;
     const file = req.file;
-
+    const ingredientsInput = req.body.ingredients;
     console.log("User ID:", userId);
-
     try {
-      if (!file) {
-        console.error("No file uploaded");
-        return res.status(400).send("No file uploaded");
+      if (!file && !ingredientsInput) {
+        console.error("No file or ingredients provided");
+        return res.status(400).send("Please provide either an image or ingredients");
       }
-      const uniqueFilename = uuidv4() + '.jpg';
-      const jpegImagePath = path.join(dotenvDirName, 'uploads', uniqueFilename);
-      await saveImageAsJPEG(file.path, jpegImagePath);
-
-      let ingredients = null;
+      let ingredients = ingredientsInput || null;
       let product_name = "No product name detected";
       let product_brand = "No product brand detected";
       let verdict = "No verdict";
       let why = [];
       let detailed_analysis = "No analysis available";
-
-      try {
-        const form = new FormData();
-        form.append('image', fs.createReadStream(jpegImagePath));
-        form.append('user_id', userId);
-        form.append('filename', uniqueFilename);
-        const response = await axios.post(
-          "http://127.0.0.1:5000/detect-ingredients",
-          form,
-          {
-            headers: {
-              ...form.getHeaders(),
-            },
-          }
-        );
-
-        ingredients = response.data.ingredients || "No ingredients detected";
-        product_name = response.data.product_name || "No product name detected";
-        product_brand = response.data.product_brand || "No product brand detected";
-        
-        const data = await analyzeClaim(claim, ingredients);
-
-        console.log("Data:", data);
-
-        if (data) {
-          verdict = data.verdict;
-          why = data.why;
-          detailed_analysis = data.detailed_analysis;
+      if (!ingredientsInput && file) {
+        const uniqueFilename = uuidv4() + '.jpg';
+        const jpegImagePath = path.join(dotenvDirName, 'uploads', uniqueFilename);
+        await saveImageAsJPEG(file.path, jpegImagePath);
+        try {
+          const form = new FormData();
+          form.append('image', fs.createReadStream(jpegImagePath));
+          form.append('user_id', userId);
+          form.append('filename', uniqueFilename);
+          const response = await axios.post(
+            "http://127.0.0.1:5000/detect-ingredients",
+            form,
+            {
+              headers: {
+                ...form.getHeaders(),
+              },
+            }
+          );
+          ingredients = response.data.ingredients || "No ingredients detected";
+          product_name = response.data.product_name || "No product name detected";
+          product_brand = response.data.product_brand || "No product brand detected";
+        } catch (error) {
+          console.error("Failed to make request:", error.message);
+          ingredients = "Error occurred during prediction";
         }
-      } catch (error) {
-        console.error("Failed to make request:", error.message);
-        ingredients = "Error occurred during prediction";
       }
-
+      console.log("Ingredients:", ingredients);
+      const data = await analyzeClaim(claim, ingredients);
+      console.log("Data:", data);
+      if (data) {
+        verdict = data.verdict;
+        why = data.why;
+        detailed_analysis = data.detailed_analysis;
+      }
       res.render('prediction', { 
         product_name, 
         product_brand, 
@@ -251,9 +246,8 @@ app.post('/predict', upload.single('image'), async (req, res) => {
         why, 
         detailed_analysis 
       });
-    
     } catch (error) {
-      console.error("Error fetching previous searches:", error.message);
+      console.error("Error occurred:", error.message);
       res.status(500).send("Error occurred");
     }
   } else {
@@ -261,28 +255,26 @@ app.post('/predict', upload.single('image'), async (req, res) => {
   }
 });
 
+
 app.post('/search', async (req, res) => {
   if (req.isAuthenticated()) {
       const productName = req.body.product_name;
       const userId = req.user.user_id;
 
       try {
-          const query = `
-              SELECT * FROM products
-              WHERE LOWER(product_name) LIKE LOWER($1);
-          `;
-          const values = [`%${productName}%`];
-          
-          const result = await db.query(query, values);
-
-          if (result.rows.length === 0) {
+        const query = `
+        SELECT * FROM products
+        WHERE LOWER(product_name) LIKE LOWER($1)
+        OR LOWER(product_brand) LIKE LOWER($1);
+        `;
+        const values = [`%${searchTerm}%`];
+        const result = await db.query(query, values);
+        if (result.rows.length === 0) {
               res.render('searchResults', { products: [], message: 'No products found.', userId });
               return;
-          }
-
-          const products = result.rows;
-          res.render('searchResults', { products, message: null, userId });
-
+        }
+        const products = result.rows;
+        res.render('searchResults', { products, message: null, userId });
       } catch (error) {
           console.error("Error searching for products:", error.message);
           res.status(500).send("Error occurred during the search.");
