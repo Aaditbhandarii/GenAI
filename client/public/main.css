@@ -125,15 +125,3 @@ body {
     box-shadow: #95d2d2;
 
 }
-.loginbutton{
-    background: #e1f0f0 !important;
-    color: #000000;
-    border: none;
-    padding: 0.5rem 1rem;    
-    cursor: pointer;    
-    border-radius: 5px;
-    font-family: Consolas, Courier New, monospace;
-    font-size: 14px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: -1px -1px 3px rgba(137, 147, 151, 0.3), 1px 1px 3px rgba(137, 147, 151, 0.3);
-}
