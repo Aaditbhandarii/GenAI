@@ -132,7 +132,6 @@ def scrape_ingredient_image(name, category, brand):
     search_url = f'https://www.bigbasket.com/ps/?q={name}%2C+{category}%2C+{brand}&nc=as'
     print(f"Searching for: {search_url}")
     soup = get_product_info(search_url)
-
     x = soup.find_all("h3", {"class": "flex flex-col xl:gap-1 lg:gap-0.5"})
     
     if x:
