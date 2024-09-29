@@ -18,7 +18,7 @@ const upload = multer({ dest: 'uploads/' });
 
 const fileName = fileURLToPath(import.meta.url);
 const dotenvDirName = path.dirname(fileName);
-const dotenvPath = path.join(dotenvDirName, "../.env");
+const dotenvPath = path.join(dotenvDirName, "./.env");
 config({ path: dotenvPath });
 
 const app = express();
@@ -52,7 +52,8 @@ const db = new pg.Client({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 });
-db.connect();
+
+db.connect().catch(err => console.error('Database connection error', err));
 
 passport.serializeUser((user, done) => {
     done(null, user.user_id); 
@@ -330,3 +331,7 @@ async function saveImageAsJPEG(inputPath, outputPath) {
     throw error;
   }
 }
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+})

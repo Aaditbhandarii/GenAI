@@ -1,4 +1,3 @@
-version: '3.8'  # Specify the Docker Compose version
 
 services:  # Define services
   server:  # Name of the server service
