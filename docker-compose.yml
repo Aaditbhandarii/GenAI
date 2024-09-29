@@ -1,0 +1,27 @@
+version: '3.8'  # Specify the Docker Compose version
+
+services:  # Define services
+  server:  # Name of the server service
+    build:
+      context: ./server  # Path to the server Dockerfile
+      dockerfile: Dockerfile  # Specify the Dockerfile name
+    ports:
+      - "5000:5000"  # Map ports
+    env_file:
+      - ./server/.env  # Load environment variables from .env file
+    volumes:
+      - ./client/uploads:/app/uploads 
+      - ./server/ingredient_images:/app/ingredient_images
+
+  client:  # Name of the client service
+    build:
+      context: ./client  # Path to the client Dockerfile
+      dockerfile: Dockerfile  # Specify the Dockerfile name
+    ports:
+      - "3000:3000"  # Map ports
+    env_file:
+      - ./client/.env  # Load environment variables from .env file
+    volumes:
+      - ./client/uploads:/app/uploads  # Mount the uploads folder from client
+
+

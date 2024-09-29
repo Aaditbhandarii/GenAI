@@ -20,7 +20,8 @@ conn = psycopg2.connect(
     port=os.environ['DB_PORT']
 )
 
-UPLOAD_PATH = 'C:/Users/aadit/OneDrive - Shri Vile Parle Kelavani Mandal/Desktop/GenAI/client/uploads'
+UPLOAD_PATH = '/app/uploads'
+INGREDIENT_IMAGE_PATH = '/app/ingredient_images'
 
 def normalize_name(name):
     name = name.replace('+', ' ').replace('&', 'and')
@@ -159,20 +160,40 @@ def scrape_ingredient_image(name, category, brand):
         print("No products found for this search.")
         return "No products found for this search."
 
+# def download_image(url, save_path):
+#     headers = {
+#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+#     }
+#     try:
+#         img_data = requests.get(url, headers=headers)
+#         img_data.raise_for_status()
+#         with open(save_path, 'wb') as handler:
+#             handler.write(img_data.content)
+#         print(f"Downloaded image from {url} to {save_path}.")
+#     except requests.RequestException as e:
+#         print(f"Failed to download image: {e}")
+#         return False
+#     return True
+
 def download_image(url, save_path):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
     }
     try:
-        img_data = requests.get(url, headers=headers)
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+        img_data = requests.get(url, headers=headers, timeout=10)  # Set a 10-second timeout
         img_data.raise_for_status()
         with open(save_path, 'wb') as handler:
             handler.write(img_data.content)
         print(f"Downloaded image from {url} to {save_path}.")
+        return True
     except requests.RequestException as e:
         print(f"Failed to download image: {e}")
         return False
-    return True
+    except OSError as e:
+        print(f"Failed to save image to {save_path}: {e}")
+        return False
+
 
 @app.route('/detect-ingredients', methods=['POST'])
 def detect_ingredients():
@@ -204,7 +225,9 @@ def detect_ingredients():
             print("No ingredient image found.")
             return jsonify({'error': 'No ingredient image found'}), 404
         
-        ingredient_image_path = "downloaded_ingredient_image.jpg"
+        ingredient_image_filename = f"{name}_{brand}_ingredient_image.jpg"
+        ingredient_image_path = os.path.join(INGREDIENT_IMAGE_PATH, ingredient_image_filename)
+
         if not download_image(ingredient_image_url, ingredient_image_path):
             return jsonify({'error': 'Failed to download image'}), 500
         
@@ -226,9 +249,10 @@ def detect_ingredients():
         }), 200
     except Exception as e:
         print(f"Server Error: {e}")
+        app.logger.error("Error processing request: %s", e)
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
 

@@ -99,14 +99,6 @@ app.get("/", (req, res) => {
     res.render("index.ejs");
 });
 
-app.get("/loginpage", (req, res) => {
-    res.render("loginpage.ejs");
-});
-
-app.get("/register", (req, res) => {
-    res.render("register.ejs");
-});
-
 app.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
   try {
@@ -144,7 +136,7 @@ app.post("/register", async (req, res) => {
 
 app.get('/homepage', async (req, res) => {
     if (!req.user.user_id) {
-      return res.redirect('/loginpage');
+      return res.redirect('/');
     }
     try {
       const searches = await previousSearches(req.user.user_id);
@@ -183,7 +175,7 @@ app.post(
   "/loginpage",
   passport.authenticate("local", {
     successRedirect: "/homepage",
-    failureRedirect: "/loginpage",
+    failureRedirect: "/",
   })
 );
 
@@ -215,7 +207,7 @@ app.post('/predict', upload.single('image'), async (req, res) => {
           form.append('user_id', userId);
           form.append('filename', uniqueFilename);
           const response = await axios.post(
-            "http://127.0.0.1:5000/detect-ingredients",
+            "http://server:5000/detect-ingredients",
             form,
             {
               headers: {
@@ -248,11 +240,11 @@ app.post('/predict', upload.single('image'), async (req, res) => {
         detailed_analysis 
       });
     } catch (error) {
-      console.error("Error occurred:", error.message);
-      res.status(500).send("Error occurred");
+      console.error("Error in /detect-ingredients:", error);
+      res.status(500).send("Internal Server Error");
     }
   } else {
-    res.redirect("/loginpage");
+    res.redirect("/");
   }
 });
 
@@ -281,13 +273,13 @@ app.post('/search', async (req, res) => {
           res.status(500).send("Error occurred during the search.");
       }
   } else {
-      res.redirect("/login");
+      res.redirect("/index");
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server running at http://localhost:${port}`);
+// });
 
 const previousSearches = async (user_id) => {
     try {
