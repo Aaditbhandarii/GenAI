@@ -144,9 +144,9 @@ def scrape_ingredient_image(name, category, brand):
         json_data = json.loads(data)
         images = json_data['props']['pageProps']['productDetails']['children'][0]['images']
         total_images = len(images)
-        if total_images >= 7:
+        if total_images >= 8:
             img_url = images[3]['l']
-        elif 3 <= total_images < 7:
+        elif 3 <= total_images <= 7:
             img_url = images[2]['l']
         elif total_images == 2:
             img_url = images[1]['l']
