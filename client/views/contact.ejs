@@ -62,7 +62,7 @@
             margin-bottom: 30px;
         }
 
-        /* .upload-area {
+        .upload-area {
             border: 2px dashed #a5d6a7;
             padding: 30px;
             margin: 20px auto;
@@ -71,25 +71,7 @@
             background-color: #ffffff;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 100, 0, 0.1);
-        } */
-
-        .upload-area {
-    border: 2px dashed #a5d6a7;
-    padding: 30px;
-    margin: 20px auto;
-    width: 80%; /* Set width to 80% of the viewport */
-    max-width: 300px; /* Maximum width on larger screens */
-    cursor: pointer;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 100, 0, 0.1);
-}
-
-@media (min-width: 600px) {
-    .upload-area {
-        width: 70%; /* Wider screens get slightly narrower upload area */
-    }
-}
+        }
 
         .upload-label {
             display: block;
@@ -123,7 +105,11 @@
             color: #e8f5e9;
             position: relative;
             width: 100%;
-            bottom: 0;
+            bottom: 0px;
+        }
+
+        h1 {
+            font-size: 3rem;
         }
 
 
@@ -225,6 +211,11 @@
             margin: 10px 0;
         }
 
+        .second{
+            margin-top: 15%;
+            margin-bottom: 15%;
+        }
+
         .no-searches {
             text-align: center;
             font-size: 1.2rem;
@@ -255,57 +246,14 @@
     </div>
 
     <div class="main-content">
-        <h1>Scan Your Food Product</h1>
-        <form action="/predict" method="post" enctype="multipart/form-data">
-            <div class="upload-section">
-                <div class="upload-area">
-                    <input type="file" name="image" id="image" accept="image/*" hidden><br>
-                    <label for="image" class="upload-label">Click to upload an image of the product label</label>
-                    <p class="file-uploaded" id="file-uploaded">File uploaded: <span id="file-name"></span></p>
-                </div>
-            </div>
-
-            <div class="claim-section">
-                <textarea id="claimInput" placeholder="Enter product details manually if you don't want to upload an image..."></textarea>
-                <label for="claim" class="upload-label">Claim:</label>
-                <input type="text" name="claim" id="claim"><br>
-                <button class="claim-button" type = "submit">Submit Claim</button>
-            </div>
-        </form>
-
-        <div class="lower-section">
-            <h2>Previous Searches</h2>
-            <% if (searches.length > 0) { %>
-                <div class="searches-container">
-                    <% searches.forEach(search => { %>
-                        <div class="card">
-                            <strong>Product Name:</strong> <%= search.product_name %><br>
-                            <strong>Brand:</strong> <%= search.product_brand %><br>
-                            <strong>Ingredients:</strong> <%= search.ingredients %><br>
-                        </div>
-                    <% }) %>
-                </div>
-            <% } else { %>
-                <p class="no-searches">No previous searches found.</p>
-            <% } %>
+        <h1>Truthify</h1>
+        <div class="second">
+            <h3>For queries, contact us at <a href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@truthify.com" target="_blank">contact@truthify.com</a></h3>
         </div>
     </div>
 
     <div class="footer">
         <p>© 2024 Food Product Scanner. All Rights Reserved.</p>
     </div>
-    <script>
-        const imageInput = document.getElementById('image');
-        const fileUploadedText = document.getElementById('file-uploaded');
-        const fileNameText = document.getElementById('file-name');
-
-        imageInput.addEventListener('change', function() {
-            if (imageInput.files.length > 0) {
-                const fileName = imageInput.files[0].name;
-                fileNameText.textContent = fileName;
-                fileUploadedText.style.display = 'block';
-            }
-        });
-    </script>
 </body>
 </html>

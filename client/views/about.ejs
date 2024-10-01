@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Product Label Scanner</title>
+    <link rel="stylesheet" href="/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-image: url('/images/bg4.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            animation: backgroundShift 45s infinite alternate;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: rgba(34, 139, 34, 0.8); 
+            color: white;
+            border-bottom: 2px solid #66bb6a;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .navbar a {
+            color: #e8f5e9;
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #c5e1a5;
+        }
+        .main-content {
+            padding: 60px;
+            padding-bottom: 120px; 
+            text-align: left;
+            background-color: rgba(240, 255, 240, 0.8); 
+            border-radius: 15px;
+            margin: 40px auto;
+            width: 70%;
+            box-shadow: 0 4px 8px rgba(0, 100, 0, 0.2);
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 15px;
+            background-color: rgba(34, 139, 34, 0.8);
+            color: #e8f5e9;
+            position: relative;
+            width: 100%;
+            bottom: 0px;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        .claim-button:hover {
+            background-color: #66bb6a;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes backgroundShift {
+            0% {
+                background-position: center;
+                background-size: cover;
+            }
+            50% {
+                background-position: top right;
+                background-size: cover;
+            }
+            100% {
+                background-position: bottom left;
+                background-size: cover;
+            }
+        }
+
+
+
+        strong {
+            font-weight: 900;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        .second{
+            margin-top: 15%;
+            margin-bottom: 15%;
+        }
+
+        .space {
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">Food Product Scanner</div>
+        <div class="navbar">
+            <a href="/homepage">Home</a>
+            <a href="/contact">Contact</a>
+            <a href="/about">About Us</a>
+        </div>
+    </div>
+
+    <!-- <div class="main-content">
+        <h1>About Truthify</h1>
+        <div class="space">
+            <h3>Truthify is an AI-powered smart label reader designed to help consumers make healthier food choices by understanding the health impact of packaged food products.</h3>
+        </div>
+        <h1>The Problem:</h1>
+        <div class="space">
+            <h3>Many consumers struggle to interpret nutrition labels and assess how food ingredients affect their health. With rising concerns about diet-related health issues, there’s a need for a simple solution that can decode complex food labels.</h3>
+        </div>
+        <h1>Our Solution:</h1>
+        <div class="space">
+            <h3>Truthify uses cutting-edge AI and machine learning models to scan food labels and provide an easy-to-understand health impact analysis. It gives insights into ingredients, nutritional value, and potential allergens, allowing users to make informed decisions about their purchases.</h3>
+        </div>
+        <h1>How It Works:        </h1>
+        <div class="space">
+            <h3>
+                <ul>
+                    <li><strong>Label Scanning:</strong> Users scan food labels using their mobile device.</li>
+                    <li><strong>AI Analysis:</strong> Our model processes the ingredients and nutritional content.</li>
+                    <li><strong>Health Impact:</strong> It then provides an overall health rating and flags any harmful ingredients or allergens.</li>
+                    <li><strong>Personalized Suggestions:</strong> Based on user preferences, it can suggest healthier alternatives.</li>
+                </ul>
+            </h3>
+        </div>
+        <h1>Technologies:</h1>
+        <div class="space">
+            <h3>
+                <ul>
+                    <li><strong>AI/ML:</strong> For label parsing and health impact analysis.</li>
+                    <li><strong>OCR (Optical Character Recognition):</strong> For scanning and reading product labels.</li>
+                </ul>
+            </h3>
+        </div>
+        <h1> Team Contributers</h1>
+        <div class="space">
+            <h3>
+                <ul>
+                    <li>Aadit Bhandari</li>
+                    <li>Aryan Kekatpure</li>
+                    <li>Aditya Shah</li>
+                    <li>Arnav Patil</li>
+                </ul>
+            </h3>
+        </div>
+        <h1>Impact: </h1>
+        <div class="space">
+            <h3>With Truthify, we aim to empower consumers with knowledge about what they are eating. This project is especially useful for individuals with dietary restrictions, allergies, or those who simply want to lead a healthier lifestyle.</h3>
+        </div>
+        <h1>Vision: </h1>
+        <div>
+            <p>Our long-term goal is to expand ConsumeWise to cover a wider range of food products and integrate with platforms like grocery stores and online marketplaces to provide real-time product information.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2024 Food Product Scanner. All Rights Reserved.</p>
+    </div> -->
+    <div class="main-content">
+        <h1>About Truthify</h1>
+        <div class="space">
+            <h2>What is Truthify?</h2>
+            <p>Truthify is an AI-powered smart label reader designed to help consumers make healthier food choices by understanding the health impact of packaged food products.</p>
+        </div>
+    
+        <h2>The Problem</h2>
+        <div class="space">
+            <p>Many consumers struggle to interpret nutrition labels and assess how food ingredients affect their health. With rising concerns about diet-related health issues, there’s a need for a simple solution that can decode complex food labels.</p>
+        </div>
+    
+        <h2>Our Solution</h2>
+        <div class="space">
+            <p>Truthify uses cutting-edge AI and machine learning models to scan food labels and provide an easy-to-understand health impact analysis. It gives insights into ingredients, nutritional value, and potential allergens, allowing users to make informed decisions about their purchases.</p>
+        </div>
+    
+        <h2>How It Works</h2>
+        <div class="space">
+            <ul>
+                <li><strong>Label Scanning:</strong> Users scan food labels using their mobile device.</li>
+                <li><strong>AI Analysis:</strong> Our model processes the ingredients and nutritional content.</li>
+                <li><strong>Health Impact:</strong> It provides an overall health rating and flags any harmful ingredients or allergens.</li>
+                <li><strong>Personalized Suggestions:</strong> Based on user preferences, it can suggest healthier alternatives.</li>
+            </ul>
+        </div>
+    
+        <h2>Technologies</h2>
+        <div class="space">
+            <ul>
+                <li><strong>AI/ML:</strong> For label parsing and health impact analysis.</li>
+                <li><strong>OCR (Optical Character Recognition):</strong> For scanning and reading product labels.</li>
+            </ul>
+        </div>
+    
+        <h2>Team Contributors</h2>
+        <div class="space">
+            <ul>
+                <li>Aadit Bhandari</li>
+                <li>Aryan Kekatpure</li>
+                <li>Aditya Shah</li>
+                <li>Arnav Patil</li>
+            </ul>
+        </div>
+    
+        <h2>Impact</h2>
+        <div class="space">
+            <p>With Truthify, we aim to empower consumers with knowledge about what they are eating. This project is especially useful for individuals with dietary restrictions, allergies, or those who simply want to lead a healthier lifestyle.</p>
+        </div>
+    
+        <h2>Vision</h2>
+        <div>
+            <p>Our long-term goal is to expand Truthify to cover a wider range of food products and integrate with platforms like grocery stores and online marketplaces to provide real-time product information.</p>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>© 2024 Food Product Scanner. All Rights Reserved.</p>
+    </div>
+    
+</body>
+</html>
