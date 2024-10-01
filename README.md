@@ -115,7 +115,7 @@ Before starting, ensure you have the following installed:
 
 - Docker
 - pgAdmin 4
-```
+
 ## Setup Instructions
 
 ### Step 1: Clone the Repository
