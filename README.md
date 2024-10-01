@@ -87,7 +87,7 @@ SESSION_SECRET=your_secret
 ```bash
 docker-compose up --build -->
 
-```markdown
+
 # GenAI - Truthify
 
 ## Part of the ConsumeWise Initiative
