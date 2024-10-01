@@ -86,7 +86,6 @@ SESSION_SECRET=your_secret
 
 ```bash
 docker-compose up --build -->
-Certainly! Here's a single markdown file that you can copy, paste, and push directly to your repository. This file combines all the information into a well-structured README.md:
 
 ```markdown
 # GenAI - Truthify
@@ -120,7 +119,7 @@ Before starting, ensure you have the following installed:
 ## Setup Instructions
 
 ### Step 1: Clone the Repository
-
+```
 ```bash
 git clone https://github.com/Aaditbhandarii/GenAI.git
 cd GenAI
@@ -185,9 +184,3 @@ This will start the application. You can now access Truthify through your web br
 
 We welcome contributions to Truthify! Please feel free to submit pull requests or open issues to suggest improvements or report bugs.
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-```
-
-This README.md file is now ready to be copied and pasted into your repository. It provides a comprehensive overview of the project, setup instructions, and other important information for users and potential contributors. You can push this file directly to your repository, and it will render nicely on GitHub or other Git platforms.
