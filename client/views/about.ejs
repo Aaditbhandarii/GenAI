@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Food Product Label Scanner</title>
+    <title>Truthify</title>
+    <link rel="icon" type="image/png" href="./images/truthify.png">
     <link rel="stylesheet" href="/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -116,6 +117,7 @@
 
         .space {
             margin-bottom: 30px;
+            margin-top: 10px;
         }
 
         @media (max-width: 768px) {
@@ -133,7 +135,7 @@
 </head>
 <body>
     <div class="header">
-        <div class="logo">Food Product Scanner</div>
+        <div class="logo">Truthify</div>
         <div class="navbar">
             <a href="/homepage">Home</a>
             <a href="/contact">Contact</a>
@@ -143,37 +145,41 @@
 
     <div class="main-content">
         <h1>About Truthify</h1>
-        <div class="space">
+        <div>
             <h2>What is Truthify?</h2>
             <p>Truthify is an AI-powered smart label reader designed to help consumers make healthier food choices by understanding the health impact of packaged food products.</p>
         </div>
     
         <h2>The Problem</h2>
-        <div class="space">
+        <div>
             <p>Many consumers struggle to interpret nutrition labels and assess how food ingredients affect their health. With rising concerns about diet-related health issues, there’s a need for a simple solution that can decode complex food labels.</p>
         </div>
     
         <h2>Our Solution</h2>
-        <div class="space">
-            <p>Truthify uses cutting-edge AI and machine learning models to scan food labels and provide an easy-to-understand health impact analysis. It gives insights into ingredients, nutritional value, and potential allergens, allowing users to make informed decisions about their purchases.</p>
+        <div>
+            <p>Truthify utilizes Gemini for text extraction from product images and employs web scraping to fetch ingredient details. It provides users with an easy-to-understand health impact analysis, offering insights into ingredients, nutritional values, and potential allergens. The platform also validates product claims in real-time, ensuring transparency and helping users make informed decisions about their food purchases.</p>
         </div>
     
         <h2>How It Works</h2>
         <div class="space">
             <ul>
-                <li><strong>Label Scanning:</strong> Users scan food labels using their mobile device.</li>
-                <li><strong>AI Analysis:</strong> Our model processes the ingredients and nutritional content.</li>
-                <li><strong>Health Impact:</strong> It provides an overall health rating and flags any harmful ingredients or allergens.</li>
-                <li><strong>Personalized Suggestions:</strong> Based on user preferences, it can suggest healthier alternatives.</li>
+                <li><strong>Label Scanning:</strong> Users upload food label images using their mobile device or web interface.</li>
+                <li><strong>Text Extraction:</strong> Gemini extracts the ingredients and nutritional content from the label.</li>
+                <li><strong>Ingredient Analysis: </strong> The system fetches ingredient details via web scraping and cross-checks with a database.</li>
+                <li><strong>Claim Verification:</strong> It verifies product claims (e.g., "organic," "low sugar") by comparing data from reliable sources.</li>
+                <li><strong>Health Impact:</strong> It provides an overall health assessment and flags any harmful ingredients or allergens.</li>
             </ul>
         </div>
     
         <h2>Technologies</h2>
         <div class="space">
             <ul>
-                <li><strong>AI/ML:</strong> For label parsing and health impact analysis.</li>
-                <li><strong>OCR (Optical Character Recognition):</strong> For scanning and reading product labels.</li>
-            </ul>
+                <li><strong>Gemini:</strong> For text extraction from product labels.</li>
+                <li><strong>Web Scraping:</strong> To fetch ingredient details.</li>
+                <li><strong>PostgreSQL :</strong> For storing user searches, product data, and ingredients.</li>
+                <li><strong>Custom Prompts:</strong> For fine-tuning text extraction and improving ingredient parsing.</li>
+                <li><strong>ZenRows:</strong> To bypass firewalls and scrape ingredient images from BigBasket.</li>
+              </ul>
         </div>
     
         <h2>Team Contributors</h2>
