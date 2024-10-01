@@ -160,20 +160,7 @@ def scrape_ingredient_image(name, category, brand):
         print("No products found for this search.")
         return "No products found for this search."
 
-# def download_image(url, save_path):
-#     headers = {
-#         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
-#     }
-#     try:
-#         img_data = requests.get(url, headers=headers)
-#         img_data.raise_for_status()
-#         with open(save_path, 'wb') as handler:
-#             handler.write(img_data.content)
-#         print(f"Downloaded image from {url} to {save_path}.")
-#     except requests.RequestException as e:
-#         print(f"Failed to download image: {e}")
-#         return False
-#     return True
+
 
 def download_image(url, save_path):
     headers = {

@@ -108,89 +108,14 @@ app.get("/", (req, res) => {
   res.render("index");
 })
 
-// app.post("/register", async (req, res) => {
-//   const { username, email, password } = req.body;
-//   try {
-//     const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
-
-//     if (checkResult.rows.length > 0) {
-//       res.redirect("/loginpage");
-//     } else {
-//       bcrypt.hash(password, saltRounds, async (err, hash) => {
-//         if (err) {
-//           console.error("Error hashing password:", err);
-//           res.status(500).send("Internal server error");
-//         } else {
-//           const result = await db.query(
-//             "INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *",
-//             [username, email, hash]
-//           );
-
-//           req.login(result.rows[0], (err) => {
-//             if (err) {
-//               console.error("Error logging in after registration:", err);
-//               return res.status(500).send("Login after registration failed");
-//             }
-//             console.log("User ID after registration and login:", result.rows[0].user_id);
-//             res.redirect("/homepage");
-//           });
-//         }
-//       });
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Internal server error");
-//   }
-// });
-
-// app.post("/register", async (req, res) => {
-//   const { username, email, password } = req.body;
-//   try {
-//     const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
-
-//     if (checkResult.rows.length > 0) {
-//       // Render index.ejs with a flag to open the login modal and show an error
-//       res.render("index.ejs", {
-//         loginModalOpen: true,
-//         message: "Email already exists. Please log in.",
-//       });
-//     } else {
-//       bcrypt.hash(password, saltRounds, async (err, hash) => {
-//         if (err) {
-//           console.error("Error hashing password:", err);
-//           res.status(500).send("Internal server error");
-//         } else {
-//           const result = await db.query(
-//             "INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *",
-//             [username, email, hash]
-//           );
-
-//           req.login(result.rows[0], (err) => {
-//             if (err) {
-//               console.error("Error logging in after registration:", err);
-//               return res.status(500).send("Login after registration failed");
-//             }
-//             console.log("User ID after registration and login:", result.rows[0].user_id);
-//             res.redirect("/homepage");
-//           });
-//         }
-//       });
-//     }
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send("Internal server error");
-//   }
-// });
-
 app.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
   try {
     const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [email]);
 
     if (checkResult.rows.length > 0) {
-      // User already exists, open the login modal and display error message
       return res.render("index.ejs", {
-        loginModalOpen: true, // This opens the login modal
+        loginModalOpen: true,
         message: "Email already exists. Please log in.",
       });
     } else {
@@ -266,63 +191,20 @@ app.get('/contact', (req, res) => {
   res.render('contact');
 });
 
-// app.post("/loginpage", (req, res, next) => {
-//   passport.authenticate("local", (err, user, info) => {
-//     if (err) {
-//       return next(err);
-//     }
-//     if (!user) {
-//       // Pass loginError and message to the template when authentication fails
-//       return res.render("index.ejs", {
-//         loginError: true,
-//         message: "Invalid email or password",
-//       });
-//     }
-//     req.logIn(user, (err) => {
-//       if (err) {
-//         return next(err);
-//       }
-//       return res.redirect("/homepage");
-//     });
-//   })(req, res, next);
-// });
-
-// app.post(
-//   "/loginpage",
-//   passport.authenticate("local", {
-//     successRedirect: "/homepage",
-//     failureRedirect: "/",
-//     failureFlash: true, // To use flash messages if you have configured flash middleware
-//   }),
-//   (req, res) => {
-//     if (req.isAuthenticated()) {
-//       res.redirect("/homepage");
-//     } else {
-//       // Handle login error by rendering the page with the login modal open
-//       res.render("index.ejs", {
-//         loginModalOpen: true,
-//         message: "Invalid email or password. Please try again.",
-//       });
-//     }
-//   }
-// );
-
 app.post("/loginpage", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      return next(err); // Handle error
+      return next(err); 
     }
     if (!user) {
-      // Login failed, keep the modal open and show the error message
       return res.render("index.ejs", {
         loginModalOpen: true,
         message: info ? info.message : "Invalid email or password.",
       });
     }
-    // If login is successful
     req.login(user, (err) => {
       if (err) {
-        return next(err); // Handle error
+        return next(err);
       }
       return res.redirect("/homepage");
     });
@@ -426,10 +308,6 @@ app.post('/search', async (req, res) => {
       res.redirect("/index");
   }
 });
-
-// app.listen(port, () => {
-//   console.log(`Server running at http://localhost:${port}`);
-// });
 
 const previousSearches = async (user_id) => {
     try {

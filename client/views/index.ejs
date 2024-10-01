@@ -6,7 +6,7 @@
       <title>Welcome to Truthify</title>
       <link rel="stylesheet" href="/main.css">
       <style>
-          /* General Styling */
+        
           * {
               margin: 0;
               padding: 0;
@@ -21,8 +21,7 @@
               overflow: hidden;
               position: relative;
           }
-  
-          /* Canvas Styling */
+
           #threeJsCanvas {
               position: fixed;
               top: 0;
@@ -31,8 +30,7 @@
               height: 100%;
               z-index: -1;
           }
-  
-          /* Navbar */
+
           .navbar {
               display: flex;
               justify-content: space-between;
@@ -54,8 +52,7 @@
           .navbar a:hover {
               color: #66bb6a;
           }
-  
-          /* Main Content */
+
           .main-content {
               text-align: center;
               padding: 100px 20px;
@@ -76,8 +73,6 @@
               line-height: 1.8;
               animation: fadeIn 2s ease-in-out;
           }
-  
-          /* Modal styles remain unchanged */
           .modal {
               display: none;
               position: fixed;
@@ -172,90 +167,22 @@
           </div>
       </div>
       
-      <!-- Modal content remains unchanged
-      <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('loginModal')">&times;</span>
-            <h1 class="login">Login</h1>
-            <form action="/loginpage" method="POST">
-                <input type="email" id="email" name="email" placeholder="Email" required>
-                <input type="password" id="password" name="password" placeholder="Password" required>
-                <button type="submit" class="loginbutton">Login</button>
-            </form>
-        </div>
-      </div> -->
-      <!-- <div id="loginModal" class="modal" style="display: <%= error ? 'flex' : 'none' %>;">
-        <div class="modal-content">
-          <span class="close" onclick="closeModal('loginModal')">&times;</span>
-          <h1 class="login">Login</h1>
-          <% if (error) { %>
-            <div class="error-message" style="color: red;"><%= error %></div>
-          <% } %>
-          <form action="/loginpage" method="POST">
-            <input type="email" id="email" name="email" placeholder="Email" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <button type="submit" class="loginbutton">Login</button>
-          </form>
-        </div>
-      </div> -->
-
-      <!-- <div id="loginModal" class="modal" style="display: <% if (typeof loginError !== 'undefined' && loginError) { %>flex<% } else { %>none<% } %>;">
-        <div class="modal-content">
-          <span class="close" onclick="closeModal('loginModal')">&times;</span>
-          <h1 class="login">Login</h1>
-      
-          <% if (typeof loginError !== 'undefined' && loginError) { %>
-            <div class="error-message" style="color: red;">
-              <%= message %>
-            </div>
-          <% } %>
-      
-          <form action="/loginpage" method="POST">
-            <input type="email" id="email" name="email" placeholder="Email" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <button type="submit" class="loginbutton">Login</button>
-          </form>
-        </div>
-      </div> -->
-
-      <!-- <div id="loginModal" class="modal" style="display: <% if (typeof loginModalOpen !== 'undefined' && loginModalOpen) { %>flex<% } else { %>none<% } %>;">
-        <div class="modal-content">
-          <span class="close" onclick="closeModal('loginModal')">&times;</span>
-          <h1 class="login">Login</h1>
-      
-          <% if (typeof message !== 'undefined' && message) { %>
-            <div class="error-message" style="color: red;">
-              <%= message %>
-            </div>
-          <% } %>
-      
-          <form action="/loginpage" method="POST">
-            <input type="email" id="email" name="email" placeholder="Email" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
-            <button type="submit" class="loginbutton">Login</button>
-          </form>
-        </div>
-      </div> -->
-
       <div id="loginModal" class="modal" style="display: <% if (typeof loginModalOpen !== 'undefined' && loginModalOpen) { %>flex<% } else { %>none<% } %>;">
-  <div class="modal-content">
-    <span class="close" onclick="closeModal('loginModal')">&times;</span>
-    <h1 class="login">Login</h1>
-
-    <!-- Display error message if either login or registration fails -->
-    <% if (typeof message !== 'undefined' && message) { %>
-      <div class="error-message" style="color: red;">
-        <%= message %>
+        <div class="modal-content">
+        <span class="close" onclick="closeModal('loginModal')">&times;</span>
+        <h1 class="login">Login</h1>
+        <% if (typeof message !== 'undefined' && message) { %>
+          <div class="error-message" style="color: red;">
+            <%= message %>
+          </div>
+        <% } %>
+        <form action="/loginpage" method="POST">
+          <input type="email" id="email" name="email" placeholder="Email" required>
+          <input type="password" id="password" name="password" placeholder="Password" required>
+          <button type="submit" class="loginbutton">Login</button>
+        </form>
       </div>
-    <% } %>
-
-    <form action="/loginpage" method="POST">
-      <input type="email" id="email" name="email" placeholder="Email" required>
-      <input type="password" id="password" name="password" placeholder="Password" required>
-      <button type="submit" class="loginbutton">Login</button>
-    </form>
-  </div>
-</div>
+    </div>
   
       <div id="registerModal" class="modal">
         <div class="modal-content">
@@ -272,7 +199,6 @@
   
       <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
       <script>
-          // Three.js setup
           const scene = new THREE.Scene();
           const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
           const renderer = new THREE.WebGLRenderer({
@@ -280,8 +206,6 @@
               alpha: true
           });
           renderer.setSize(window.innerWidth, window.innerHeight);
-  
-          // Create particles
           const particlesGeometry = new THREE.BufferGeometry();
           const particlesCount = 5000;
           const posArray = new Float32Array(particlesCount * 3);
@@ -301,23 +225,17 @@
           scene.add(particlesMesh);
   
           camera.position.z = 3;
-  
-          // Animation
           function animate() {
               requestAnimationFrame(animate);
               particlesMesh.rotation.y += 0.001;
               renderer.render(scene, camera);
           }
           animate();
-  
-          // Resize handler
           window.addEventListener('resize', () => {
               camera.aspect = window.innerWidth / window.innerHeight;
               camera.updateProjectionMatrix();
               renderer.setSize(window.innerWidth, window.innerHeight);
           });
-  
-          // Existing modal functions
           function openLoginModal() {
               document.getElementById('loginModal').style.display = 'flex';
           }
@@ -338,12 +256,6 @@
                   registerModal.style.display = 'none';
               }
           }
-        //   window.onload = function() {
-        //         const hasError = "<%= !!error %>";  // This value will be injected by the backend using EJS
-        //         if (hasError) {
-        //             openLoginModal();  // Open the login modal if there's an error
-        //         }
-        //     }
       </script>
   </body>
   </html>
