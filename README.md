@@ -193,5 +193,3 @@ SESSION_SECRET=your_secret
 
 ```bash
 docker-compose up --build
-```
-```
