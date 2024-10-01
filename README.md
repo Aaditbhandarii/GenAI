@@ -7,6 +7,7 @@ __Features__
 
 Web Scraping: Automatically retrieve a list of ingredients from the web using ZenRows and BeautifulSoup based on user input (product name).
 Manual Input: Users can manually enter the list of ingredients if scraping is not available.
+
 Claim Verification: The app verifies product claims like "boosts height" or "supports weight loss" by assessing the ingredients.
 
 Verdict Generation: A clear verdict is provided, indicating whether the product’s health claims are truthful or misleading.
@@ -22,3 +23,44 @@ __Prerequisites__
 Before starting, ensure you have the following installed:
 Docker
 pgAdmin 4
+
+__Setup Instructions__
+__Step 1__: Clone the Repository:
+git clone https://github.com/Aaditbhandarii/GenAI.git
+cd GenAI
+
+__Step 2__: Set Up PostgreSQL Database
+Open pgAdmin 4 and connect to your PostgreSQL server. Run the following SQL queries to create the necessary tables for the application
+
+CREATE TABLE products (
+    product_id SERIAL PRIMARY KEY,
+    product_name VARCHAR(255),
+    product_brand VARCHAR(255),
+    ingredients TEXT
+);
+CREATE TABLE user_searches (
+    search_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(user_id),
+    product_id INT REFERENCES products(product_id),
+    search_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (user_id, product_id)
+);
+CREATE TABLE users( 
+    user_id SERIAL PRIMARY KEY, 
+    username VARCHAR(255), 
+    email VARCHAR(255), 
+    password_hash TEXT 
+);
+
+__Step 3__: Make 2 .env files one inside client folder, other inside server with the following structure 
+API_KEY=your_gemini_api_key
+ZENROWS_KEY=your_zenrows_api_key
+DB_PASSWORD=your_db_pass
+DB_NAME=your_db_name
+DB_USER=postgres
+DB_HOST=host.docker.internal
+DB_PORT=5432
+SESSION_SECRET=your_secret
+
+__Step 4__: Start your Docker Desktop and run the following command in your CLI in the GenAI folder
+docker-compose up --build 
