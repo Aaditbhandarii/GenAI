@@ -41,7 +41,6 @@ Create a `.env` inside the `server` folder with the following structure and the 
 ```
 API_KEY=your_gemini_key
 ZENROWS_KEY=your_zenrows_free_apikey
-
 ```
 
 ### Step 3: Start Docker
