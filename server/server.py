@@ -105,9 +105,9 @@ def get_product_info(url):
 
 def extract_details(detail):
     desc = detail.strip().split(",")
-    name = desc[0].strip().replace(" ", "+")
-    category = desc[1].strip().replace(" ", "+")
-    brand = desc[2].strip().replace(" ", "+")
+    name = desc[0].strip().replace(" ", "+") if len(desc) > 0 and desc[0].strip() else "Unknown+Name"
+    category = desc[1].strip().replace(" ", "+") if len(desc) > 1 and desc[1].strip() else "Unknown+Category"
+    brand = desc[2].strip().replace(" ", "+") if len(desc) > 2 and desc[2].strip() else "Unknown+Brand"
     return name, category, brand
 
 def brand_name(image_path, model):
@@ -115,20 +115,27 @@ def brand_name(image_path, model):
     response = model.generate_content([img_file, "Analyze the provided image and identify the product name, brand name and product category of the product shown. Return only the three words separated by singular comma that is the product name, product category and brand name as your response."])
     return response.text
 
-def ingredient_photo(image_path, model,name,category,brand):
+def ingredient_photo(image_path, model, name, category, brand):
     img_file = genai.upload_file(path=image_path)
     prompt = (
-    "1. Analyze the provided image to identify any visible ingredients of the food shown.\n"
-    "2. If ingredients are visible in the image, extract and return only the ingredients.\n"
-    "3. If ingredients are not visible in the image:\n"
-    f"    a. Provide a list of common ingredients for the product with the following details:\n"
-    f"       - Product Name: {name}\n"
-    f"       - Category: {category}\n"
-    f"       - Brand: {brand}\n"
-    "4. Return only the list of ingredients as your response, with each ingredient separated by a comma."
+        "1. Analyze the provided image to identify any visible ingredients of the food shown.\n"
+        "2. If ingredients are visible in the image, extract and return only the ingredients.\n"
+        "3. If ingredients are not visible in the image:\n"
+        f"    a. Provide a list of common ingredients for the product with the following details:\n"
+        f"       - Product Name: {name}\n"
+        f"       - Category: {category}\n"
+        f"       - Brand: {brand}\n"
+        "4. Return only the list of ingredients as your response, with each ingredient separated by a comma."
     )
     response = model.generate_content([img_file, prompt])
-    return response.text
+    if hasattr(response, 'candidate') and hasattr(response.candidate, 'safety_ratings'):
+        print(f"Safety ratings: {response.candidate.safety_ratings}")
+    if hasattr(response, 'text'):
+        return response.text
+    else:
+        print("No valid part in response. Check safety ratings or other fields.")
+        return None
+
 
 def scrape_ingredient_image(name, category, brand):
     search_url = f'https://www.bigbasket.com/ps/?q={name}%2C+{category}%2C+{brand}&nc=as'
