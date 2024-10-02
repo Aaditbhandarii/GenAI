@@ -46,7 +46,7 @@ DB_NAME=defaultdb
 DB_USER=avnadmin
 DB_HOST=google-genai-google-genai.k.aivencloud.com
 DB_PORT=15811
-SESSION_SECRET=secret
+SESSION_SECRET=your_secret
 DB_SSL=true
 ```
 
