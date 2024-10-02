@@ -36,7 +36,7 @@ cd GenAI
 
 ### Step 2: Create .env Files
 
-Create a `.env` inside the `server` folder with the following structure and the db connection details are stored in code as comments next to where they have to be used update them in index.js and server.py:
+Create a `.env` inside the `server` folder with the following structure and the db connection details are stored in code as comments next to where they have to be used, kindly update them in index.js and server.py:
 
 ```
 API_KEY=your_gemini_key
