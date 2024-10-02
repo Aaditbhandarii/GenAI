@@ -17,7 +17,8 @@ conn = psycopg2.connect(
     host=os.environ['DB_HOST'],
     database=os.environ['DB_NAME'],
     password=os.environ['DB_PASSWORD'],
-    port=os.environ['DB_PORT']
+    port=os.environ['DB_PORT'],
+    sslmode='require'  # This enforces SSL connection
 )
 
 UPLOAD_PATH = '/app/uploads'

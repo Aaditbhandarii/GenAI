@@ -59,9 +59,14 @@ const db = new pg.Client({
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
+  ssl: {
+    rejectUnauthorized: false, // This is required to bypass certificate verification for self-signed certs
+  }
 });
 
-db.connect().catch(err => console.error('Database connection error', err));
+db.connect()
+  .then(() => console.log('Database connected successfully'))
+  .catch(err => console.error('Database connection error', err));
 
 passport.serializeUser((user, done) => {
     done(null, user.user_id); 
