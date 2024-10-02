@@ -13,11 +13,11 @@ import re
 load_dotenv()
 
 conn = psycopg2.connect(
-    user=os.environ['DB_USER'],
-    host=os.environ['DB_HOST'],
-    database=os.environ['DB_NAME'],
-    password=os.environ['DB_PASSWORD'],
-    port=os.environ['DB_PORT'],
+    user=os.environ['DB_USER'],#avnadmin
+    host=os.environ['DB_HOST'], #google-genai-google-genai.k.aivencloud.com
+    database=os.environ['DB_NAME'],#defaultdb
+    password=os.environ['DB_PASSWORD'], #AVNS_NeifNSNJ3dNgEjgB3Om
+    port=os.environ['DB_PORT'], #15811
     sslmode='require'  # This enforces SSL connection
 )
 

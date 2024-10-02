@@ -36,18 +36,12 @@ cd GenAI
 
 ### Step 2: Create .env Files
 
-Create two `.env` files: one inside the `client` folder and the other inside the `server` folder with the following structure:
+Create a `.env` inside the `server` folder with the following structure and the db connection details are stored in code as comments next to where they have to be used update them in index.js and server.py:
 
 ```
 API_KEY=your_gemini_key
 ZENROWS_KEY=your_zenrows_free_apikey
-DB_PASSWORD=AVNS_NeifNSNJ3dNgEjgB3Om
-DB_NAME=defaultdb
-DB_USER=avnadmin
-DB_HOST=google-genai-google-genai.k.aivencloud.com
-DB_PORT=15811
-SESSION_SECRET=your_secret
-DB_SSL=true
+
 ```
 
 ### Step 3: Start Docker

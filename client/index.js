@@ -54,11 +54,11 @@ app.use((req, res, next) => {
 });
 
 const db = new pg.Client({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  user: process.env.DB_USER, //avnadmin
+  host: process.env.DB_HOST, //google-genai-google-genai.k.aivencloud.com
+  database: process.env.DB_NAME, //defaultdb
+  password: process.env.DB_PASSWORD, //AVNS_NeifNSNJ3dNgEjgB3Om
+  port: process.env.DB_PORT, //15811
   ssl: {
     rejectUnauthorized: false, // This is required to bypass certificate verification for self-signed certs
   }
