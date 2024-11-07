@@ -1,2 +1,6 @@
 /server/.env
 /client/.env
+node_modules
+client/package-lock.json
+client/package-lock.json
+server/requirements_conda.txt
